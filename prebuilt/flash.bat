@@ -41,22 +41,34 @@ choice /C YN /M "继续刷写"
 if errorlevel 2 exit /b 0
 
 echo.
-echo [1/2] 检查 esptool ...
-python -m esptool version >nul 2>&1
+echo [1/2] 检查 Python 与 esptool ...
+
+set "PY=python"
+%PY% -c "import esptool" >nul 2>&1
 if errorlevel 1 (
-    echo.
-    echo [错误] 没找到 esptool。先装一下：
-    echo.
-    echo     pip install esptool
-    echo.
-    echo 装完重新运行本脚本。
-    pause
-    exit /b 1
+    set "PY=py"
+    !PY! -c "import esptool" >nul 2>&1
+    if errorlevel 1 (
+        echo.
+        echo [错误] 没找到可用的 esptool。
+        echo.
+        echo 分两种情况：
+        echo   A. 电脑上根本没装 Python
+        echo      -^> 去 https://www.python.org/downloads/ 装一个
+        echo         安装时务必勾选 "Add python.exe to PATH"
+        echo   B. 装了 Python 但没有 esptool
+        echo      -^> 打开命令提示符，运行：  pip install esptool
+        echo.
+        echo 装完关掉这个窗口，重新双击 flash.bat。
+        pause
+        exit /b 1
+    )
 )
+echo        使用 !PY!，esptool 已就绪
 
 echo [2/2] 开始刷写，大约 30-60 秒，过程中不要拔线 ...
 echo.
-python -m esptool --chip esp32c3 -p %PORT% -b 460800 ^
+!PY! -m esptool --chip esp32c3 -p %PORT% -b 460800 ^
     --before default_reset --after hard_reset ^
     write_flash 0x0 "%BIN%"
 
