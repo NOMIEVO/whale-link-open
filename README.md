@@ -212,24 +212,41 @@ Montserrat 字体，没引入中文字库）。
 若你只想快速对接，看 [`SKILL.md`](SKILL.md)——它按「想做什么 → 发什么 → 怎么判断成功」
 组织，并附了完整排错清单。
 
-## 上传到 GitHub
-
-`.gitignore` 已排除构建产物（`build/`、`managed_components/`、`.gradle/`、
-`local.properties`），直接提交即可：
+## 获取代码
 
 ```bash
-cd whale-link
-git init
-git add .
-git commit -m "WhaleLink: BLE 手机 ↔ ESP32-C3 挂件联调套件"
-git branch -M main
-git remote add origin https://github.com/<你的账号>/whale-link.git
-git push -u origin main
+git clone https://github.com/NOMIEVO/whale-link-open.git
+cd whale-link-open
 ```
+
+仓库只含源码（约 65 个文件），构建产物一律不入库：
+
+- `firmware/build/`、`firmware/managed_components/`、`firmware/sdkconfig`
+- `android/.gradle/`、`android/app/build/`、`android/local.properties`
 
 > `firmware/managed_components/` 不入库是正确的：ESP-IDF 会按
 > `components/bsp/idf_component.yml` + `dependencies.lock` 自动还原。
 > 首次 `idf.py build` 需要联网拉取约 180 MB 依赖。
+
+## 国内网络下的 Git 推送
+
+若 `git push` 报 `Failed to connect to github.com:443`，说明命令行没走
+系统代理（浏览器能开 GitHub 但 git 不能，就是这个原因）。先查系统代理端口：
+
+```powershell
+Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' |
+    Select-Object ProxyEnable, ProxyServer
+```
+
+再把查到的端口（这里假设 `4780`）配给本仓库：
+
+```bash
+git config --local http.proxy  http://127.0.0.1:4780
+git config --local https.proxy http://127.0.0.1:4780
+```
+
+`--local` 只影响本仓库，不污染全局设置。换网络环境后若代理失效，
+用 `git config --local --unset http.proxy` 撤销即可。
 
 ## 许可
 
