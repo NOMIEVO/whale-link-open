@@ -12,6 +12,25 @@
 
 ---
 
+## 不想编译？直接下这两个文件
+
+[`prebuilt/`](prebuilt/) 里有编好的成品，下载即用：
+
+| 文件 | 说明 |
+|---|---|
+| [`WhaleLink-1.0-full.bin`](prebuilt/WhaleLink-1.0-full.bin) | ESP32-C3 整片固件，`esptool` 从 `0x0` 写入 |
+| [`WhaleLink-1.0.apk`](prebuilt/WhaleLink-1.0.apk) | Android App，直接安装 |
+
+详细步骤（含图形化刷写工具、权限说明、排错表）见
+[`prebuilt/README.md`](prebuilt/README.md)。Windows 用户把 bin 和
+[`prebuilt/flash.bat`](prebuilt/flash.bat) 放一起，双击传个 COM 口就刷完了。
+
+> 固件和 App **必须配套**：协议改过之后新旧版本混用会连不上。升级时两个一起换。
+
+想自己改代码继续往下看。
+
+---
+
 ## 这不是什么
 
 - ❌ **不是产品固件**。界面是四块状态卡片，没有中文字模、没有角色资源、没有账本/音效/深睡。
@@ -62,6 +81,12 @@ whale-link/
 ├── README.md                  ← 本文件
 ├── SKILL.md                   ← 能力清单 + 调用方式 + 排错手册（给集成者/AI 用）
 ├── LICENSE
+├── prebuilt/                  ← 编译好的成品（免编译直接用）
+│   ├── WhaleLink-1.0-full.bin ← 整片固件镜像，0x0 起
+│   ├── WhaleLink-1.0.apk      ← Android App
+│   ├── flash.bat              ← Windows 一键刷写
+│   ├── SHA256SUMS.txt         ← 校验和
+│   └── README.md              ← 安装步骤 + 排错表
 ├── firmware/                  ← ESP-IDF 工程（C）
 │   ├── main/
 │   │   ├── whale_ble.c/.h     ← GATT server：7 个特征、协议解析、反向 notify
