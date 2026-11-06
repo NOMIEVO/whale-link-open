@@ -2,6 +2,10 @@
 
 不想装 ESP-IDF / Android SDK？直接下这里两个文件就行。
 
+> **推荐走 Release 页面下载**：<https://github.com/NOMIEVO/whale-link-open/releases/latest>
+> —— 附件区是一个大按钮，不用在仓库里找 Raw / Download。
+> 下面的文件与本目录内容完全一致（同一份构建产物，双份存档）。
+
 | 文件 | 用途 | 大小 |
 |---|---|---|
 | `WhaleLink-1.0-full.bin` | ESP32-C3 整片固件镜像（从 `0x0` 开始） | 约 1 MB |

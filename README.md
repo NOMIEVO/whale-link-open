@@ -5,6 +5,11 @@
 
 一套可用于验证协议与硬件能力的**参考实现**，含固件与 App 两端源码。
 
+[![Release](https://img.shields.io/github/v/release/NOMIEVO/whale-link-open?label=release&color=2ea44f)](https://github.com/NOMIEVO/whale-link-open/releases/latest)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Firmware](https://img.shields.io/badge/firmware-ESP32--C3-orange)](firmware/)
+[![App](https://img.shields.io/badge/app-Android%208.0%2B-3ddc84)](android/)
+
 > **English**: A BLE reference implementation for driving a 240×320 ESP32-C3 display
 > accessory from an Android phone — clock sync, sensor streaming, low-fps screen mirroring,
 > an on-device flash store with variable-length allocation, and on-demand resource loading
@@ -14,16 +19,21 @@
 
 ## 不想编译？直接下这两个文件
 
-[`prebuilt/`](prebuilt/) 里有编好的成品，下载即用：
+### → [**⬇ 前往 Releases 页面下载**](https://github.com/NOMIEVO/whale-link-open/releases/latest)
+
+Release 页面上的附件是**一个大按钮直接下载**，不用在仓库里找 Raw / Download。
+
+也可以直接点这里：
 
 | 文件 | 说明 |
 |---|---|
-| [`WhaleLink-1.0-full.bin`](prebuilt/WhaleLink-1.0-full.bin) | ESP32-C3 整片固件，`esptool` 从 `0x0` 写入 |
-| [`WhaleLink-1.0.apk`](prebuilt/WhaleLink-1.0.apk) | Android App，直接安装 |
+| [WhaleLink-1.0-full.bin](https://github.com/NOMIEVO/whale-link-open/releases/download/v1.0/WhaleLink-1.0-full.bin) | ESP32-C3 整片固件（1.05 MB），`esptool` 从 `0x0` 写入 |
+| [WhaleLink-1.0.apk](https://github.com/NOMIEVO/whale-link-open/releases/download/v1.0/WhaleLink-1.0.apk) | Android App（2.95 MB），直接安装 |
+| [flash.bat](https://github.com/NOMIEVO/whale-link-open/releases/download/v1.0/flash.bat) | Windows 一键刷写，双击后传 COM 口 |
 
-详细步骤（含图形化刷写工具、权限说明、排错表）见
-[`prebuilt/README.md`](prebuilt/README.md)。Windows 用户把 bin 和
-[`prebuilt/flash.bat`](prebuilt/flash.bat) 放一起，双击传个 COM 口就刷完了。
+同样的文件也放在仓库 [`prebuilt/`](prebuilt/) 目录里（含源码同版本对照）。
+详细步骤（图形化刷写工具、权限说明、排错表）见
+[`prebuilt/README.md`](prebuilt/README.md)。
 
 > 固件和 App **必须配套**：协议改过之后新旧版本混用会连不上。升级时两个一起换。
 
