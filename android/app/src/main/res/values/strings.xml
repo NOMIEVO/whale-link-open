@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Whale Link</string>
+    <string name="notif_channel_name">与挂件保持连接</string>
+    <string name="notif_title">Whale Link 正在运行</string>
+    <string name="notif_text_idle">正在等待挂件</string>
+</resources>

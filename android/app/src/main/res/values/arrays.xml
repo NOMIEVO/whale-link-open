@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 设备侧解码上限是 120×160（裸像素 38400 字节）。C3 没有 PSRAM，
+         BLE 常驻后只剩七八十 KB 可用堆，解码缓冲和解码后的位图要同时在内存里，
+         160×213 需要 66.6 KB，一定分配失败 —— 所以这里不提供超过 120×160 的档位。 -->
+    <string-array name="res_labels">
+        <item>120 × 160（推荐）</item>
+        <item>96 × 128（更快）</item>
+        <item>80 × 107（最快）</item>
+    </string-array>
+    <string-array name="interval_labels">
+        <item>0.2 秒 / 帧（约 5 fps）</item>
+        <item>0.5 秒 / 帧（约 2 fps）</item>
+        <item>1.0 秒 / 帧（约 1 fps）</item>
+    </string-array>
+</resources>

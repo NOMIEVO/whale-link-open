@@ -1,0 +1,10 @@
+# Name,   Type, SubType, Offset,   Size,     Flags
+nvs,      data, nvs,     0x9000,   0x6000,
+phy_init, data, phy,     0xf000,   0x1000,
+# factory 从 8MB 全占缩到 3MB：应用本身只有约 1.1MB，3MB 足够；剩下的空间
+# 切出来做「手机文件 → 设备」的持久化存储（whale_file 的一个大池子）。
+factory,  app, factory, 0x10000,  0x300000,
+# subtype 用 spiffs 只是惯例（gen_esp32part 认识的 data 子类），实际不用 SPIFFS：
+# whale_file.c 自己按「4KB 对齐的连续区段 + NVS 元数据」管理这一整块，
+# 目的是让任意文件的数据在 flash 上物理连续，才能 esp_partition_mmap 零拷贝直读。
+storage,  data, spiffs,  0x310000, 0x4F0000,

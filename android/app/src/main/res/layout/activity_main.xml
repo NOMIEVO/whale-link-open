@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Whale Link"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A18" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="把手机的时间、姿态、位置和画面送到挂件"
+            android:textSize="13sp"
+            android:textColor="#5F5E5A" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tv_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="未连接"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A18" />
+
+            <TextView
+                android:id="@+id/tv_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="点下面的按钮，扫描附近的 WhaleBT 设备"
+                android:textSize="12sp"
+                android:textColor="#5F5E5A" />
+
+            <TextView
+                android:id="@+id/tv_stats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text=""
+                android:textSize="11sp"
+                android:textColor="#888780" />
+
+            <Button
+                android:id="@+id/btn_connect"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="#0F6E56"
+                android:text="扫描并连接"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="6dp"
+            android:text="数据开关"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#2C2C2A" />
+
+        <Switch
+            android:id="@+id/sw_time"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:checked="true"
+            android:text="时间（默认开启）"
+            android:textColor="#1A1A18"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/sw_motion"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="陀螺仪 / 加速度"
+            android:textColor="#1A1A18"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/sw_location"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="位置（GPS）"
+            android:textColor="#1A1A18"
+            android:textSize="15sp" />
+
+        <Switch
+            android:id="@+id/sw_mirror"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="投屏模式"
+            android:textColor="#1A1A18"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="投屏是低帧率画面回传（约 1–2 帧/秒），不是实时同屏"
+            android:textSize="11sp"
+            android:textColor="#888780" />
+
+        <LinearLayout
+            android:id="@+id/mirror_opts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="14dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分辨率"
+                android:textSize="12sp"
+                android:textColor="#5F5E5A" />
+
+            <Spinner
+                android:id="@+id/sp_res"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="帧间隔"
+                android:textSize="12sp"
+                android:textColor="#5F5E5A" />
+
+            <Spinner
+                android:id="@+id/sp_interval"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <CheckBox
+                android:id="@+id/cb_tile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="只发变化块（增量，静止画面几乎不占带宽）"
+                android:textSize="12sp"
+                android:textColor="#5F5E5A" />
+
+            <CheckBox
+                android:id="@+id/cb_raw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="直推裸像素（不做 RLE，画质无损但更慢）"
+                android:textSize="12sp"
+                android:textColor="#5F5E5A" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="6dp"
+            android:text="文件储存（设备 Flash，4 槽 × 1MB）"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#2C2C2A" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <Spinner
+                android:id="@+id/sp_slot"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <Button
+                android:id="@+id/btn_mount_next"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#6B4FBB"
+                android:text="要下一张照片（等同设备长按 OK）"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btn_file_send"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#0F6E56"
+                android:text="选择文件并发送到槽位"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_file_list"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="列表"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_file_verify"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="校验"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_file_delete"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="删除"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_file_compact"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:text="整理空间（合并碎片）"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="设备把整个 4.9MB 存储做成一个池子，每个文件按实际大小分配连续区段（不是等分槽位）。删掉中间的大文件会留下空洞，此时点「整理空间」把后面的文件前移即可回收。发送完成后设备回读校验 CRC，结果看运行日志。"
+                android:textSize="11sp"
+                android:textColor="#888780" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="6dp"
+            android:text="运行日志"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#2C2C2A" />
+
+        <TextView
+            android:id="@+id/tv_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card"
+            android:fontFamily="monospace"
+            android:padding="12dp"
+            android:text=""
+            android:textColor="#444441"
+            android:textSize="11sp" />
+    </LinearLayout>
+</ScrollView>

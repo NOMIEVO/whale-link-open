@@ -1,0 +1,23 @@
+# ---- ESP-IDF ----
+firmware/build/
+firmware/sdkconfig
+firmware/sdkconfig.old
+firmware/managed_components/
+firmware/*.bin
+firmware/*.elf
+firmware/*.map
+
+# ---- Android / Gradle ----
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/captures/
+*.iml
+*.hprof
+
+# ---- 通用 ----
+*.log
+.DS_Store
+Thumbs.db

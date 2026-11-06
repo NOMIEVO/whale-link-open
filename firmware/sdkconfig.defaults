@@ -1,0 +1,82 @@
+# --- 目标芯片 ---
+CONFIG_IDF_TARGET="esp32c3"
+# 注:ESP32-C3 无 PSRAM,故不设 CONFIG_SPIRAM。
+
+# --- Flash ---
+# FoloToy AI Passport 当前产品/固件基线使用 8MB Flash。
+CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y
+# 固定 8MB 镜像头，关闭 detect，便于 idf.py merge-bin。
+CONFIG_ESPTOOLPY_HEADER_FLASHSIZE_UPDATE=n
+# 默认模板只保留 NVS、PHY data 和占用剩余空间的 factory app；用户可按需修改。
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"
+
+# --- 控制台:USB-Serial-JTAG(C3 原生 USB,GPIO18/19)---
+# 不用 UART0:其默认 TX=GPIO21 与本板背光引脚冲突。
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+
+# --- LVGL ---
+CONFIG_LV_COLOR_DEPTH_16=y
+# 刷新周期:原来 20 ms(目标 50 FPS)是跑不满的 —— 240×320 RGB565 全屏 153,600 B,
+# 80 MHz SPI 光传数据就要 ~15 ms,再叠加软件渲染、每块缓冲的字节交换、单缓冲
+# 8 次 flush 的等待,单帧轻松超过 20 ms。结果是 LVGL 追不上自己设的节奏,
+# 帧间隔忽长忽短(重绘面积逐帧还在变),动画就"一顿一顿"。
+# 锁到 33 ms(30 FPS)给每帧留出余量:帧率数字变低,但帧间隔稳定,观感更顺。
+CONFIG_LV_DEF_REFR_PERIOD=33
+# 诊断用:屏幕右下角实时显示 FPS 与 CPU 占用(v18~v21 用来确认性能优化有没有真的提帧,
+# 实测已完成 —— 静态 ~30 fps、中间层是真凶)。现在关掉,正式固件不要留这个浮层。
+# 需要再诊断时把下面两行放开即可(LV_USE_PERF_MONITOR 依赖 LV_USE_SYSMON,必须成对开)。
+# CONFIG_LV_USE_SYSMON=y
+# CONFIG_LV_USE_PERF_MONITOR=y
+# 测试画面全部是 ASCII，用 LVGL 自带的 Montserrat 就够了，
+# 不再引入任何中文字模（产品固件那套 16/24 号子集字体与这里无关）。
+CONFIG_LV_FONT_MONTSERRAT_14=y
+CONFIG_LV_FONT_MONTSERRAT_16=y
+CONFIG_LV_FONT_MONTSERRAT_24=y
+# LVGL 分配器:改用系统堆的 malloc/realloc/free,不再用 LVGL 自带的 TLSF 静态池。
+# 踩过的坑:静态池一旦不够,lv_tlsf.c 的 block_locate_free 会进入死循环 —— 表现是
+# 开机后 main 任务被任务看门狗每 5s 报警一次、界面完全卡住。48KB 在加角色图后爆过,
+# 扩到 96KB 又撑住了,但加上气泡图(199x174)后再爆 —— 说明"每次加图就扩容"是治标。
+# 改走系统堆:RAM 余量更大、不够时返回 NULL 而不是死循环,彻底消除这个坑。
+CONFIG_LV_USE_CLIB_MALLOC=y
+
+# --- 系统 ---
+CONFIG_FREERTOS_HZ=1000
+
+# --- 蓝牙版:整条 Wi-Fi / HTTPS 链路都不要了 ---------------------------------
+#
+# 这一版不连 Wi-Fi:余额由手机查好后经 BLE 写进来。所以下面这些全部关掉 ——
+# 它们是当初判断「内存不够、塞不下 BLE」的账本里最大的几项:
+#   Wi-Fi(静态 ~20 KB + 动态更大) / LwIP / mbedTLS 证书包(Flash 里 ~200 KB,
+#   运行时还有解压缓冲) / httpd / SNTP。换来的余量足够 BLE 常驻。
+# 注:LWIP 在 IDF v5 里不能关(CONFIG_LWIP_TCP/UDP 这两个符号已经不存在),
+# 留着它不吃 RAM,只占 Flash。真正省下来的是 Wi-Fi 与证书包。
+CONFIG_ESP_WIFI_ENABLED=n
+CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=n
+# mbedTLS 本体还得留着:NimBLE 的安全连接(Secure Connections)要用它的 AES-CMAC。
+CONFIG_MBEDTLS_DYNAMIC_BUFFER=y
+CONFIG_MBEDTLS_DYNAMIC_FREE_CONFIG_DATA=y
+
+# --- Bluetooth LE / NimBLE ---
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+# 只做 GATT server + 广播,不需要 central 角色。
+CONFIG_BT_NIMBLE_ROLE_CENTRAL=n
+CONFIG_BT_NIMBLE_ROLE_OBSERVER=n
+CONFIG_BT_NIMBLE_ROLE_PERIPHERAL=y
+CONFIG_BT_NIMBLE_ROLE_BROADCASTER=y
+# 只连一台手机:省下每多加一条连接就要的ATT/GATT 缓存。
+CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1
+# 手机端会把 MTU 谈到 517（ATT 上限）。这里给满：投屏一帧 8 KB，
+# MTU 128 时每块只有 109 字节、要拆 74 块，而每块都要等一个连接事件 ——
+# 这是之前只能跑 1~2 fps 的主因。517 之后同样一帧只要 17 块。
+# 注意：ATT MTU 521 字节会被拆成多个 255 字节的 ACL 包由 host 重组，
+# 所以下面 TRANSPORT_ACL_SIZE 保持 255 是对的，别去改大。
+CONFIG_BT_NIMBLE_ATT_PREFERRED_MTU=517
+# 允许 LL 发起 PHY 更新流程，才谈得上 2M PHY。C3 支持 BLE 5 的 2M，
+# 速率翻倍，投屏是最吃这个的场景。
+CONFIG_BT_CTRL_BLE_LLCP_PHY_UPDATE=y
+# 安全连接要用,别省 —— 不加密的话周围任何设备都能改写屏幕上的余额。
+CONFIG_BT_NIMBLE_SM_SC=y
